@@ -7,6 +7,8 @@
   --accent: #2f6b4f;
   --accent-ink: #ffffff;
   --gold: #c9973f;
+  --cup-gold: #c5a028;
+  --cup-gold-hi: #e9c85a;
   --glass: rgba(255, 255, 255, 0.55);
   --glass-edge: rgba(46, 59, 47, 0.35);
   --saucer: #e6d8bd;
@@ -25,6 +27,8 @@
     --accent: #7cc49b;
     --accent-ink: #13221a;
     --gold: #e0b866;
+    --cup-gold: #d9b44a;
+    --cup-gold-hi: #f3d77a;
     --glass: rgba(255, 255, 255, 0.10);
     --glass-edge: rgba(241, 233, 218, 0.35);
     --saucer: #3b342b;
@@ -33,6 +37,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -57,6 +62,48 @@ a:hover { text-decoration-thickness: 2px; }
 h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.15; }
 .site-header h1 { font-size: clamp(30px, 6vw, 46px); margin: 6px 0 4px; letter-spacing: -0.01em; }
 .tagline { margin: 0; color: var(--ink-soft); }
+.byline { margin: 0 0 6px; font-family: var(--font-display); font-size: 20px; color: var(--ink); }
+.byline .built { font-family: var(--font-body); font-size: 14px; color: var(--ink-soft); }
+.byline .built a { color: inherit; }
+.ticket-promo {
+  display: inline-flex; align-items: center; gap: 10px; margin: 14px auto 0; padding: 8px 16px;
+  border-radius: 999px; font-weight: 600; font-size: 15px; color: #5a4310;
+  background: linear-gradient(135deg, #fff3c4, #f6dc85); border: 1px solid #d9b44a; max-width: 100%;
+}
+@media (prefers-color-scheme: dark) { .ticket-promo { color: #3a2a05; } }
+.mini-ticket { flex: none; width: 30px; height: 18px; border-radius: 3px; background: linear-gradient(135deg, #f7dd78, #c5a028 60%, #f3d77a); box-shadow: inset 0 0 0 1.5px rgba(120,85,10,.45); }
+
+/* Golden ticket */
+.golden-ticket {
+  position: absolute; z-index: 6; width: 58px; height: 34px; padding: 0; cursor: pointer;
+  border: 0; border-radius: 4px; transform: rotate(var(--rot, -12deg));
+  background: linear-gradient(135deg, #fbe9a0 0%, #d9b030 35%, #f6dd7c 55%, #b88a14 100%);
+  box-shadow: 0 2px 6px rgba(90,60,0,.35), inset 0 0 0 2px rgba(255,248,220,.6);
+  color: #6b4b06; font: 800 7.5px/1.05 var(--font-body); letter-spacing: .08em;
+  -webkit-mask: radial-gradient(circle 5px at 0 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+                radial-gradient(circle 5px at 100% 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask: radial-gradient(circle 5px at 0 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+                radial-gradient(circle 5px at 100% 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+  animation: glint 4s ease-in-out infinite;
+}
+.golden-ticket span { display: block; border: 1px dashed rgba(107,75,6,.5); margin: 4px 7px; padding: 2px 0; border-radius: 2px; }
+.golden-ticket:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.golden-ticket.inline { position: relative; display: inline-block; vertical-align: middle; margin-left: 8px; }
+@keyframes glint { 0%, 88%, 100% { filter: brightness(1); } 92% { filter: brightness(1.35); } }
+.chip.gold { background: linear-gradient(135deg, #fbe9a0, #e0bb45); border-color: #c5a028; color: #4d3605; }
+
+.ticket-modal { padding: 22px; }
+.ticket-card {
+  border-radius: 14px; padding: 20px 18px 16px; margin-bottom: 14px; color: #4d3605;
+  background: linear-gradient(135deg, #fff3c4 0%, #f1cd5e 45%, #fbe9a0 70%, #d9ad2b 100%);
+  box-shadow: inset 0 0 0 3px rgba(255,250,230,.7), inset 0 0 0 5px rgba(150,110,15,.35);
+}
+.ticket-card h2 { color: #3b2902; font-size: 26px; }
+.ticket-kicker { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #6b4b06 !important; }
+.ticket-prize { font-family: var(--font-display); font-size: 20px; color: #3b2902 !important; margin: 4px 0 10px !important; }
+.ticket-code { font-size: 15px; color: #4d3605 !important; margin: 0 !important; }
+.ticket-code b { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 20px; letter-spacing: .12em; display: block; color: #2e1f00; }
+.ticket-date { font-size: 13px; color: #6b4b06 !important; margin: 4px 0 0 !important; }
 
 /* Toolbar */
 .toolbar {
@@ -90,7 +137,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .cup:focus-visible { outline: 3px solid var(--gold); outline-offset: 6px; border-radius: 12px; }
 .cup .glass {
   position: absolute; left: 4px; top: 12px; width: var(--w); height: var(--h);
-  border: 2.5px solid var(--glass-edge); border-top-width: 2px;
+  border: 2.5px solid var(--cup-gold); border-top-width: 3px;
   border-radius: 6px 6px 26px 26px;
   background: var(--glass); overflow: hidden;
   display: flex; flex-direction: column-reverse;
@@ -98,7 +145,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 .cup .handle {
   position: absolute; left: calc(var(--w) + 2px); top: 34px; width: 18px; height: 40px;
-  border: 2.5px solid var(--glass-edge); border-left: 0; border-radius: 0 16px 16px 0;
+  border: 2.5px solid var(--cup-gold); border-left: 0; border-radius: 0 16px 16px 0;
 }
 .cup .saucer {
   position: absolute; left: -6px; right: 4px; bottom: 10px; height: 12px;
@@ -116,7 +163,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 @keyframes fillIn { from { transform: scaleY(0); opacity: .4; } to { transform: scaleY(1); opacity: 1; } }
 
 .cup.selected { transform: translateY(-18px); }
-.cup.selected .glass { border-color: var(--gold); }
+.cup.selected .glass { border-color: var(--cup-gold-hi); box-shadow: 0 0 0 3px rgba(233,200,90,.45), 0 8px 18px rgba(197,160,40,.35); }
+.cup.selected .handle { border-color: var(--cup-gold-hi); }
 .cup.shake { animation: shake .3s; }
 @keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
@@ -182,6 +230,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 @media (max-width: 520px) {
+  .ticket-promo { border-radius: 16px; font-size: 14px; padding: 10px 14px; text-align: left; }
   .cup { --w: 44px; --h: 86px; --hw: 14px; }
   .cup .handle { width: 11px; height: 28px; top: 26px; border-width: 2px; }
   .cup .glass { border-radius: 5px 5px 20px 20px; }

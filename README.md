@@ -1,6 +1,6 @@
 # Tea Sort Puzzle
 
-A free tea pouring puzzle with 80 levels, by [NED Air Filters](https://www.nedairfilters.com).
+A free tea pouring puzzle with 80 levels, by Erica Powers. Built by [Ned Games](https://www.nedairfilters.com/games).
 Plain HTML, CSS and JavaScript. No build step, no dependencies.
 
 **Live site:** https://teasort.nedwebservices.com/
@@ -11,7 +11,7 @@ Plain HTML, CSS and JavaScript. No build step, no dependencies.
 |---|---|
 | `index.html` | The game page, with the how-to-play text Google reads |
 | `about.html`, `privacy.html` | About and Privacy pages |
-| `game.js` | Game logic (pouring, undo, extra cup, levels, saved progress) |
+| `game.js` | Game logic (pouring, undo, extra cup, levels, saved progress, golden ticket) |
 | `levels.js` | The 80 levels. Every level was checked by a solver. |
 | `style.css` | Styles (light and dark mode) |
 | `og-image.png` | Preview image for social shares |
@@ -26,6 +26,10 @@ Plain HTML, CSS and JavaScript. No build step, no dependencies.
 - Custom domain: `teasort.nedwebservices.com` (set by the `CNAME` file).
 - DNS: a `CNAME` record for `teasort` on nedwebservices.com pointing to `ned4short.github.io`.
 - The site address appears in `index.html`, `about.html`, `privacy.html`, `sitemap.xml`, `robots.txt` and `CNAME`. Change it in all of those if the domain ever changes.
+
+## Golden ticket
+
+Each time a level starts there's a 1-in-6 chance a golden ticket hides on the page: peeking out from behind a cup, in the list of teas, or in the footer. Clicking it shows a ticket with a code (like `TB-ABCD-1234`) for a free cup of tea at the Tea Blossom. Each browser can find one ticket. To change how often it appears, edit `TICKET_CHANCE` near the top of the golden ticket section in `game.js`. To change the claim instructions, edit the `ticketHow` paragraph in `index.html`.
 
 ## Google Search Console
 

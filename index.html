@@ -3,23 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Tea Sort Puzzle – Free Online Tea Pouring Puzzle Game (80 Levels)</title>
-  <meta name="description" content="Play Tea Sort Puzzle free in your browser. Pour the tea until every cup holds one kind: green, chai, hibiscus and more. 80 levels, no download.">
+  <title>Tea Sort Puzzle by Erica Powers – Free Tea Pouring Puzzle (80 Levels)</title>
+  <meta name="description" content="Play Tea Sort Puzzle by Erica Powers free in your browser. Pour the tea until every cup holds one kind. 80 levels, plus a golden ticket to find.">
   <link rel="canonical" href="https://teasort.nedwebservices.com/">
   <!-- GOOGLE-VERIFICATION: paste the google-site-verification meta tag from Search Console on the next line -->
 
   <meta name="theme-color" content="#2f6b4f">
+  <meta name="author" content="Erica Powers">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Tea Sort Puzzle">
-  <meta property="og:title" content="Tea Sort Puzzle – Free Online Tea Pouring Puzzle Game">
-  <meta property="og:description" content="Pour the brew. Fill every cup with one kind of tea. 80 free levels, no download.">
+  <meta property="og:title" content="Tea Sort Puzzle by Erica Powers">
+  <meta property="og:description" content="Pour the brew. Fill every cup with one kind of tea. 80 free levels, and a golden ticket to find.">
   <meta property="og:url" content="https://teasort.nedwebservices.com/">
   <meta property="og:image" content="https://teasort.nedwebservices.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Tea Sort Puzzle – Free Online Tea Pouring Puzzle Game">
-  <meta name="twitter:description" content="Pour the brew. Fill every cup with one kind of tea. 80 free levels, no download.">
+  <meta name="twitter:title" content="Tea Sort Puzzle by Erica Powers">
+  <meta name="twitter:description" content="Pour the brew. Fill every cup with one kind of tea. 80 free levels, and a golden ticket to find.">
   <meta name="twitter:image" content="https://teasort.nedwebservices.com/og-image.png">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,14 +28,15 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap">
   <link rel="stylesheet" href="style.css">
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"VideoGame","name":"Tea Sort Puzzle","url":"https://teasort.nedwebservices.com/","description":"Free tea pouring puzzle with 80 levels. Pour the brew until every cup holds one kind of tea.","genre":"Puzzle","gamePlatform":"Web browser","applicationCategory":"Game","operatingSystem":"Any","image":"https://teasort.nedwebservices.com/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"NED Air Filters","url":"https://www.nedairfilters.com"}}
+  {"@context":"https://schema.org","@type":"VideoGame","name":"Tea Sort Puzzle","url":"https://teasort.nedwebservices.com/","description":"Free tea pouring puzzle with 80 levels. Pour the brew until every cup holds one kind of tea.","genre":"Puzzle","gamePlatform":"Web browser","applicationCategory":"Game","operatingSystem":"Any","image":"https://teasort.nedwebservices.com/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Erica Powers"},"publisher":{"@type":"Organization","name":"Ned Games","url":"https://www.nedairfilters.com/games"}}
   </script>
 </head>
 <body>
   <header class="site-header wrap">
-    <p class="eyebrow"><a href="https://www.nedairfilters.com/games">Ned Games</a> · Tea House</p>
     <h1>Tea Sort Puzzle</h1>
+    <p class="byline">by Erica Powers <span class="built">(built by <a href="https://www.nedairfilters.com/games">Ned Games</a>)</span></p>
     <p class="tagline">Pour the brew. Fill every cup with one kind of tea.</p>
+    <p class="ticket-promo"><span class="mini-ticket" aria-hidden="true"></span>Find and click the golden ticket for a chance to win a free cup of tea at the Tea Blossom.</p>
   </header>
 
   <main class="wrap">
@@ -46,8 +48,10 @@
         <button class="chip" id="restartBtn" type="button">↻ Restart</button>
         <button class="chip" id="extraBtn" type="button" title="One extra empty cup per level">＋ Cup</button>
         <button class="chip primary" id="levelsBtn" type="button">Levels</button>
+        <button class="chip gold" id="myTicketBtn" type="button" hidden>🎟️ My ticket</button>
       </div>
       <div id="board" class="board"></div>
+      <button type="button" class="golden-ticket" id="goldenTicket" hidden aria-label="Golden ticket! Click to claim"><span>GOLDEN<br>TICKET</span></button>
       <p id="hintText" class="hint-text" aria-live="polite"></p>
       <noscript><p class="hint-text">Tea Sort Puzzle needs JavaScript turned on to play.</p></noscript>
     </section>
@@ -63,6 +67,8 @@
         <li>Stuck? Use <strong>Undo</strong>, <strong>Restart</strong>, or add <strong>one extra cup</strong> per level.</li>
         <li>80 levels, from 3 teas up to 12. Your progress is saved in your browser.</li>
       </ul>
+      <h3>The golden ticket</h3>
+      <p>Find and click the golden ticket for a chance to win a free cup of tea at the Tea Blossom. It doesn't show up on every level, so keep pouring and keep your eyes open. It could be hiding anywhere on this page.</p>
       <h3>The teas</h3>
       <p>Each tea has its own color and symbol, so you can sort them even if colors look alike to you.</p>
       <ul class="tea-key" id="teaKey">
@@ -85,7 +91,7 @@
         <li><a href="https://water-sort.replit.app">Water Sort Puzzle</a> – the classic color-sorting challenge.</li>
         <li><a href="https://www.nedairfilters.com/games">All Ned Games</a></li>
       </ul>
-      <p class="brought">Brought to you by <a href="https://www.nedairfilters.com">NED Air Filters</a> — AC filters delivered to your door, with free shipping nationwide.</p>
+      <p class="brought">Tea Sort Puzzle by Erica Powers. Built by <a href="https://www.nedairfilters.com/games">Ned Games</a>, brought to you by <a href="https://www.nedairfilters.com">NED Air Filters</a>.</p>
     </section>
   </main>
 
@@ -98,7 +104,7 @@
       <a href="#" id="shareBtn">Share</a>
       <a href="https://www.nedairfilters.com">NED Air Filters</a>
     </nav>
-    <p>© 2026 NED Air Filters</p>
+    <p>Tea Sort Puzzle by Erica Powers · Built by Ned Games</p>
   </footer>
 
   <div class="overlay" id="winOverlay" role="dialog" aria-modal="true" aria-labelledby="winTitle">
@@ -109,6 +115,20 @@
         <button class="chip" id="replayBtn" type="button">Play again</button>
         <button class="chip primary" id="nextBtn" type="button">Next level →</button>
       </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ticketOverlay" role="dialog" aria-modal="true" aria-labelledby="ticketTitle">
+    <div class="modal ticket-modal">
+      <div class="ticket-card">
+        <p class="ticket-kicker">Tea Sort Puzzle by Erica Powers</p>
+        <h2 id="ticketTitle">🎟️ You found the golden ticket!</h2>
+        <p class="ticket-prize">Free cup of tea at the Tea Blossom</p>
+        <p class="ticket-code">Ticket code <b id="ticketCode">—</b></p>
+        <p class="ticket-date" id="ticketDate"></p>
+      </div>
+      <p id="ticketHow">Take a screenshot of this ticket and show it at the Tea Blossom to claim your free cup of tea.</p>
+      <button class="chip primary" id="closeTicketBtn" type="button">Got it</button>
     </div>
   </div>
 

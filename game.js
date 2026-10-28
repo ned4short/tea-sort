@@ -40,8 +40,83 @@
     levelsOverlay: document.getElementById("levelsOverlay"),
     levelGrid: document.getElementById("levelGrid"),
     closeLevels: document.getElementById("closeLevelsBtn"),
-    share: document.getElementById("shareBtn")
+    share: document.getElementById("shareBtn"),
+    ticket: document.getElementById("goldenTicket"),
+    ticketOverlay: document.getElementById("ticketOverlay"),
+    ticketCode: document.getElementById("ticketCode"),
+    ticketDate: document.getElementById("ticketDate"),
+    closeTicket: document.getElementById("closeTicketBtn"),
+    myTicket: document.getElementById("myTicketBtn")
   };
+
+  /* ---------- Golden ticket ----------
+     Each time a level starts, there's a TICKET_CHANCE chance the golden ticket hides
+     somewhere on the page: peeking out from behind a cup, in the list of teas, or in the footer.
+     Once a player finds it, it's saved in their browser and doesn't appear again for them. */
+  var TICKET_CHANCE = 1 / 6;
+  var TICKET_KEY = "teasort.goldenticket.v1";
+  var boardArea = board.parentNode;
+  var ticketSpot = null;
+
+  function loadTicket() {
+    try { var t = JSON.parse(localStorage.getItem(TICKET_KEY) || "null"); return t && t.code ? t : null; } catch (e) { return null; }
+  }
+  function makeCode() {
+    var abc = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", out = "", n = new Uint32Array(8);
+    if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(n);
+    else for (var q = 0; q < 8; q++) n[q] = Math.floor(Math.random() * 1e9);
+    for (var k = 0; k < 8; k++) { out += abc[n[k] % abc.length]; if (k === 3) out += "-"; }
+    return "TB-" + out;
+  }
+  function hideTicket() {
+    ticketSpot = null;
+    el.ticket.hidden = true;
+    el.ticket.classList.remove("inline");
+    el.ticket.style.left = el.ticket.style.top = "";
+    if (el.ticket.parentNode !== boardArea) boardArea.appendChild(el.ticket);
+  }
+  function maybeHideTicketOnPage() {
+    hideTicket();
+    if (loadTicket() || Math.random() >= TICKET_CHANCE) return;
+    var r = Math.random();
+    el.ticket.style.setProperty("--rot", (Math.round(Math.random() * 40) - 20) + "deg");
+    if (r < 0.6) {
+      ticketSpot = { type: "cup", cup: Math.floor(Math.random() * state.cups.length), side: Math.random() < 0.5 };
+    } else {
+      var spots = r < 0.85 ? document.querySelectorAll("#teaKey li") : document.querySelectorAll(".site-footer nav a");
+      var host = spots[Math.floor(Math.random() * spots.length)];
+      if (!host) return;
+      ticketSpot = { type: "inline" };
+      el.ticket.classList.add("inline");
+      host.parentNode.insertBefore(el.ticket, host.nextSibling);
+    }
+    el.ticket.hidden = false;
+    positionTicket();
+  }
+  function positionTicket() {
+    if (!ticketSpot || ticketSpot.type !== "cup") return;
+    var cup = board.children[Math.min(ticketSpot.cup, board.children.length - 1)];
+    if (!cup) return;
+    el.ticket.style.left = (cup.offsetLeft + (ticketSpot.side ? cup.offsetWidth - 26 : -30)) + "px";
+    el.ticket.style.top = (cup.offsetTop + cup.offsetHeight - 34) + "px";
+  }
+  function showTicket(t) {
+    el.ticketCode.textContent = t.code;
+    var d = new Date(t.date);
+    el.ticketDate.textContent = "Found " + d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+    el.ticketOverlay.classList.add("open");
+    el.closeTicket.focus();
+  }
+  function claimTicket() {
+    var t = loadTicket();
+    if (!t) {
+      t = { code: makeCode(), date: new Date().toISOString(), level: state.level };
+      try { localStorage.setItem(TICKET_KEY, JSON.stringify(t)); } catch (e) {}
+    }
+    hideTicket();
+    el.myTicket.hidden = false;
+    showTicket(t);
+  }
 
   var progress = loadProgress();
   var state = { level: 1, cups: [], history: [], selected: -1, moves: 0, extraUsed: false, busy: false };
@@ -83,6 +158,7 @@
     saveProgress();
     setHint("Tap a cup to pick it up, then tap another cup to pour.");
     render();
+    maybeHideTicketOnPage();
     if (location.hash !== "#level-" + n && history.replaceState) {
       try { history.replaceState(null, "", "#level-" + n); } catch (e) {}
     }
@@ -145,6 +221,7 @@
     el.moves.textContent = state.moves;
     el.undo.disabled = !state.history.length || state.busy;
     el.extra.disabled = state.extraUsed || state.busy;
+    positionTicket();
   }
 
   function setHint(t) { el.hint.textContent = t; }
@@ -274,11 +351,16 @@
   el.next.addEventListener("click", function () { closeOverlay(el.win); startLevel(state.level + 1); });
   el.replay.addEventListener("click", function () { closeOverlay(el.win); startLevel(state.level); });
   if (el.share) el.share.addEventListener("click", function (e) { e.preventDefault(); share(); });
-  [el.win, el.levelsOverlay].forEach(function (o) {
+  el.ticket.addEventListener("click", claimTicket);
+  el.closeTicket.addEventListener("click", function () { closeOverlay(el.ticketOverlay); });
+  el.myTicket.addEventListener("click", function () { var t = loadTicket(); if (t) showTicket(t); });
+  if (loadTicket()) el.myTicket.hidden = false;
+  window.addEventListener("resize", positionTicket);
+  [el.win, el.levelsOverlay, el.ticketOverlay].forEach(function (o) {
     o.addEventListener("click", function (e) { if (e.target === o) closeOverlay(o); });
   });
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") { closeOverlay(el.levelsOverlay); closeOverlay(el.win); if (state.selected !== -1) { state.selected = -1; render(); } }
+    if (e.key === "Escape") { closeOverlay(el.levelsOverlay); closeOverlay(el.win); closeOverlay(el.ticketOverlay); if (state.selected !== -1) { state.selected = -1; render(); } }
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); undo(); }
   });
 
