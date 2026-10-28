@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://teasort.nedwebservices.com/sitemap.xml

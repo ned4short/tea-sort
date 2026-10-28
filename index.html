@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tea Sort Puzzle – Free Online Tea Pouring Puzzle Game (80 Levels)</title>
+  <meta name="description" content="Play Tea Sort Puzzle free in your browser. Pour the tea until every cup holds one kind: green, chai, hibiscus and more. 80 levels, no download.">
+  <link rel="canonical" href="https://teasort.nedwebservices.com/">
+  <!-- GOOGLE-VERIFICATION: paste the google-site-verification meta tag from Search Console on the next line -->
+
+  <meta name="theme-color" content="#2f6b4f">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tea Sort Puzzle">
+  <meta property="og:title" content="Tea Sort Puzzle – Free Online Tea Pouring Puzzle Game">
+  <meta property="og:description" content="Pour the brew. Fill every cup with one kind of tea. 80 free levels, no download.">
+  <meta property="og:url" content="https://teasort.nedwebservices.com/">
+  <meta property="og:image" content="https://teasort.nedwebservices.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tea Sort Puzzle – Free Online Tea Pouring Puzzle Game">
+  <meta name="twitter:description" content="Pour the brew. Fill every cup with one kind of tea. 80 free levels, no download.">
+  <meta name="twitter:image" content="https://teasort.nedwebservices.com/og-image.png">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"VideoGame","name":"Tea Sort Puzzle","url":"https://teasort.nedwebservices.com/","description":"Free tea pouring puzzle with 80 levels. Pour the brew until every cup holds one kind of tea.","genre":"Puzzle","gamePlatform":"Web browser","applicationCategory":"Game","operatingSystem":"Any","image":"https://teasort.nedwebservices.com/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"NED Air Filters","url":"https://www.nedairfilters.com"}}
+  </script>
+</head>
+<body>
+  <header class="site-header wrap">
+    <p class="eyebrow"><a href="https://www.nedairfilters.com/games">Ned Games</a> · Tea House</p>
+    <h1>Tea Sort Puzzle</h1>
+    <p class="tagline">Pour the brew. Fill every cup with one kind of tea.</p>
+  </header>
+
+  <main class="wrap">
+    <section class="board-area" aria-label="Game">
+      <div class="toolbar" role="toolbar" aria-label="Game controls">
+        <span class="stat">Level <b id="levelNum">1</b></span>
+        <span class="stat">Moves <b id="moveCount">0</b></span>
+        <button class="chip" id="undoBtn" type="button" aria-label="Undo last pour">↶ Undo</button>
+        <button class="chip" id="restartBtn" type="button">↻ Restart</button>
+        <button class="chip" id="extraBtn" type="button" title="One extra empty cup per level">＋ Cup</button>
+        <button class="chip primary" id="levelsBtn" type="button">Levels</button>
+      </div>
+      <div id="board" class="board"></div>
+      <p id="hintText" class="hint-text" aria-live="polite"></p>
+      <noscript><p class="hint-text">Tea Sort Puzzle needs JavaScript turned on to play.</p></noscript>
+    </section>
+
+    <section class="content" id="how-to-play">
+      <h2>How to play Tea Sort Puzzle</h2>
+      <p>Tea Sort Puzzle is a free, relaxing pouring puzzle you play right in your browser. Every cup starts with a mix of teas stacked in layers. Your job is to pour them around until each cup holds just one kind of tea.</p>
+      <ul>
+        <li>Tap a cup to pick it up, then tap another cup to pour.</li>
+        <li>You can only pour onto the same tea, or into an empty cup.</li>
+        <li>A cup holds four layers and can't be filled past the brim.</li>
+        <li>Solve the level when every cup holds one kind of tea.</li>
+        <li>Stuck? Use <strong>Undo</strong>, <strong>Restart</strong>, or add <strong>one extra cup</strong> per level.</li>
+        <li>80 levels, from 3 teas up to 12. Your progress is saved in your browser.</li>
+      </ul>
+      <h3>The teas</h3>
+      <p>Each tea has its own color and symbol, so you can sort them even if colors look alike to you.</p>
+      <ul class="tea-key" id="teaKey">
+        <li><span class="swatch" style="background:#9cc34a">●</span>Green Tea</li>
+        <li><span class="swatch" style="background:#4e2a1e">■</span>Black Tea</li>
+        <li><span class="swatch" style="background:#d08a4a">▲</span>Chai</li>
+        <li><span class="swatch" style="background:#d81b60">✿</span>Hibiscus</li>
+        <li><span class="swatch" style="background:#3949ab">◆</span>Butterfly Pea</li>
+        <li><span class="swatch" style="background:#f4d23c;color:#6b4a10">★</span>Chamomile</li>
+        <li><span class="swatch" style="background:#26a69a">✚</span>Peppermint</li>
+        <li><span class="swatch" style="background:#b5441b">♥</span>Rooibos</li>
+        <li><span class="swatch" style="background:#9c7ad6">☾</span>Lavender</li>
+        <li><span class="swatch" style="background:#7d8aa3">♣</span>Earl Grey</li>
+        <li><span class="swatch" style="background:#f4a3c0;color:#7a2d4a">❀</span>Rose</li>
+        <li><span class="swatch" style="background:#ecdcb8;color:#6b5530">▼</span>Milk Oolong</li>
+      </ul>
+      <h3>More games to try</h3>
+      <ul>
+        <li><a href="https://teapartygame.replit.app">Tea Party Matching Game</a> – match tea types and their benefits.</li>
+        <li><a href="https://water-sort.replit.app">Water Sort Puzzle</a> – the classic color-sorting challenge.</li>
+        <li><a href="https://www.nedairfilters.com/games">All Ned Games</a></li>
+      </ul>
+      <p class="brought">Brought to you by <a href="https://www.nedairfilters.com">NED Air Filters</a> — AC filters delivered to your door, with free shipping nationwide.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <nav aria-label="Footer">
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="https://www.nedairfilters.com/games">Ned Games</a>
+      <a href="https://www.nedairfilters.com/product/tipsanddonations/61">Donate</a>
+      <a href="#" id="shareBtn">Share</a>
+      <a href="https://www.nedairfilters.com">NED Air Filters</a>
+    </nav>
+    <p>© 2026 NED Air Filters</p>
+  </footer>
+
+  <div class="overlay" id="winOverlay" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+    <div class="modal">
+      <h2 id="winTitle">Tea's ready! ☕</h2>
+      <p id="winText"></p>
+      <div class="actions">
+        <button class="chip" id="replayBtn" type="button">Play again</button>
+        <button class="chip primary" id="nextBtn" type="button">Next level →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="levelsOverlay" role="dialog" aria-modal="true" aria-labelledby="levelsTitle">
+    <div class="modal">
+      <h2 id="levelsTitle">Choose a level</h2>
+      <p>Finish a level to unlock the next one.</p>
+      <div class="level-grid" id="levelGrid"></div>
+      <button class="chip" id="closeLevelsBtn" type="button">Close</button>
+    </div>
+  </div>
+
+  <script src="levels.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
