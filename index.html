@@ -36,7 +36,7 @@
     <h1>Tea Sort Puzzle</h1>
     <p class="byline">by Erica Powers <span class="built">(built by <a href="https://www.nedairfilters.com/games">Ned Games</a>)</span></p>
     <p class="tagline">Pour the brew. Fill every cup with one kind of tea.</p>
-    <p class="ticket-promo"><span class="mini-ticket" aria-hidden="true"></span>Find and click the golden ticket for a chance to win a free cup of tea at the Tea Blossom.</p>
+    <p class="ticket-promo"><span class="mini-ticket" aria-hidden="true"></span><span>Find and click the golden ticket to win a free cup of tea at the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a>.</span></p>
   </header>
 
   <main class="wrap">
@@ -51,7 +51,6 @@
         <button class="chip gold" id="myTicketBtn" type="button" hidden>🎟️ My ticket</button>
       </div>
       <div id="board" class="board"></div>
-      <button type="button" class="golden-ticket" id="goldenTicket" hidden aria-label="Golden ticket! Click to claim"><span>GOLDEN<br>TICKET</span></button>
       <p id="hintText" class="hint-text" aria-live="polite"></p>
       <noscript><p class="hint-text">Tea Sort Puzzle needs JavaScript turned on to play.</p></noscript>
     </section>
@@ -68,7 +67,7 @@
         <li>80 levels, from 3 teas up to 12. Your progress is saved in your browser.</li>
       </ul>
       <h3>The golden ticket</h3>
-      <p>Find and click the golden ticket for a chance to win a free cup of tea at the Tea Blossom. It doesn't show up on every level, so keep pouring and keep your eyes open. It could be hiding anywhere on this page.</p>
+      <p>Find and click the golden ticket to win a free cup of tea at the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a>. It can only appear on the pop-up after you complete a level, and not every time, so keep solving levels and watch for it.</p>
       <h3>The teas</h3>
       <p>Each tea has its own color and symbol, so you can sort them even if colors look alike to you.</p>
       <ul class="tea-key" id="teaKey">
@@ -108,7 +107,8 @@
   </footer>
 
   <div class="overlay" id="winOverlay" role="dialog" aria-modal="true" aria-labelledby="winTitle">
-    <div class="modal">
+    <div class="modal win-modal">
+      <button type="button" class="golden-ticket" id="goldenTicket" hidden aria-label="Golden ticket! Click to claim"><span>GOLDEN<br>TICKET</span></button>
       <h2 id="winTitle">Tea's ready! ☕</h2>
       <p id="winText"></p>
       <div class="actions">
@@ -127,7 +127,7 @@
         <p class="ticket-code">Ticket code <b id="ticketCode">—</b></p>
         <p class="ticket-date" id="ticketDate"></p>
       </div>
-      <p id="ticketHow">Take a screenshot of this ticket and show it at the Tea Blossom to claim your free cup of tea.</p>
+      <p id="ticketHow">Take a screenshot of this ticket and show it at the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a> to claim your free cup of tea.</p>
       <button class="chip primary" id="closeTicketBtn" type="button">Got it</button>
     </div>
   </div>

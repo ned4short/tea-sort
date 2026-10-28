@@ -50,13 +50,12 @@
   };
 
   /* ---------- Golden ticket ----------
-     Each time a level starts, there's a TICKET_CHANCE chance the golden ticket hides
-     somewhere on the page: peeking out from behind a cup, in the list of teas, or in the footer.
-     Once a player finds it, it's saved in their browser and doesn't appear again for them. */
+     The golden ticket can only appear on the "level complete" pop-up. Each time a player
+     completes a level there's a TICKET_CHANCE chance it shows up, tucked into a random corner
+     of the pop-up. Once a player finds it, it's saved in their browser and doesn't appear again. */
   var TICKET_CHANCE = 1 / 6;
   var TICKET_KEY = "teasort.goldenticket.v1";
-  var boardArea = board.parentNode;
-  var ticketSpot = null;
+  var CORNERS = ["pos-tl", "pos-tr", "pos-bl", "pos-br"];
 
   function loadTicket() {
     try { var t = JSON.parse(localStorage.getItem(TICKET_KEY) || "null"); return t && t.code ? t : null; } catch (e) { return null; }
@@ -69,36 +68,15 @@
     return "TB-" + out;
   }
   function hideTicket() {
-    ticketSpot = null;
     el.ticket.hidden = true;
-    el.ticket.classList.remove("inline");
-    el.ticket.style.left = el.ticket.style.top = "";
-    if (el.ticket.parentNode !== boardArea) boardArea.appendChild(el.ticket);
+    CORNERS.forEach(function (c) { el.ticket.classList.remove(c); });
   }
-  function maybeHideTicketOnPage() {
+  function maybeShowTicketOnWin() {
     hideTicket();
     if (loadTicket() || Math.random() >= TICKET_CHANCE) return;
-    var r = Math.random();
+    el.ticket.classList.add(CORNERS[Math.floor(Math.random() * CORNERS.length)]);
     el.ticket.style.setProperty("--rot", (Math.round(Math.random() * 40) - 20) + "deg");
-    if (r < 0.6) {
-      ticketSpot = { type: "cup", cup: Math.floor(Math.random() * state.cups.length), side: Math.random() < 0.5 };
-    } else {
-      var spots = r < 0.85 ? document.querySelectorAll("#teaKey li") : document.querySelectorAll(".site-footer nav a");
-      var host = spots[Math.floor(Math.random() * spots.length)];
-      if (!host) return;
-      ticketSpot = { type: "inline" };
-      el.ticket.classList.add("inline");
-      host.parentNode.insertBefore(el.ticket, host.nextSibling);
-    }
     el.ticket.hidden = false;
-    positionTicket();
-  }
-  function positionTicket() {
-    if (!ticketSpot || ticketSpot.type !== "cup") return;
-    var cup = board.children[Math.min(ticketSpot.cup, board.children.length - 1)];
-    if (!cup) return;
-    el.ticket.style.left = (cup.offsetLeft + (ticketSpot.side ? cup.offsetWidth - 26 : -30)) + "px";
-    el.ticket.style.top = (cup.offsetTop + cup.offsetHeight - 34) + "px";
   }
   function showTicket(t) {
     el.ticketCode.textContent = t.code;
@@ -158,7 +136,6 @@
     saveProgress();
     setHint("Tap a cup to pick it up, then tap another cup to pour.");
     render();
-    maybeHideTicketOnPage();
     if (location.hash !== "#level-" + n && history.replaceState) {
       try { history.replaceState(null, "", "#level-" + n); } catch (e) {}
     }
@@ -221,7 +198,6 @@
     el.moves.textContent = state.moves;
     el.undo.disabled = !state.history.length || state.busy;
     el.extra.disabled = state.extraUsed || state.busy;
-    positionTicket();
   }
 
   function setHint(t) { el.hint.textContent = t; }
@@ -312,6 +288,7 @@
       ? "You sorted all " + LEVELS.length + " levels in " + state.moves + " moves on the final one. You're a true tea master!"
       : "Level " + state.level + " sorted in " + state.moves + " moves. Ready for the next pot?";
     el.next.hidden = last;
+    maybeShowTicketOnWin();
     el.win.classList.add("open");
     (last ? el.replay : el.next).focus();
   }
@@ -348,14 +325,13 @@
   el.extra.addEventListener("click", addCup);
   el.levels.addEventListener("click", openLevels);
   el.closeLevels.addEventListener("click", function () { closeOverlay(el.levelsOverlay); });
-  el.next.addEventListener("click", function () { closeOverlay(el.win); startLevel(state.level + 1); });
-  el.replay.addEventListener("click", function () { closeOverlay(el.win); startLevel(state.level); });
+  el.next.addEventListener("click", function () { hideTicket(); closeOverlay(el.win); startLevel(state.level + 1); });
+  el.replay.addEventListener("click", function () { hideTicket(); closeOverlay(el.win); startLevel(state.level); });
   if (el.share) el.share.addEventListener("click", function (e) { e.preventDefault(); share(); });
   el.ticket.addEventListener("click", claimTicket);
   el.closeTicket.addEventListener("click", function () { closeOverlay(el.ticketOverlay); });
   el.myTicket.addEventListener("click", function () { var t = loadTicket(); if (t) showTicket(t); });
   if (loadTicket()) el.myTicket.hidden = false;
-  window.addEventListener("resize", positionTicket);
   [el.win, el.levelsOverlay, el.ticketOverlay].forEach(function (o) {
     o.addEventListener("click", function (e) { if (e.target === o) closeOverlay(o); });
   });

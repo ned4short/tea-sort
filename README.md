@@ -29,7 +29,7 @@ Plain HTML, CSS and JavaScript. No build step, no dependencies.
 
 ## Golden ticket
 
-Each time a level starts there's a 1-in-6 chance a golden ticket hides on the page: peeking out from behind a cup, in the list of teas, or in the footer. Clicking it shows a ticket with a code (like `TB-ABCD-1234`) for a free cup of tea at the Tea Blossom. Each browser can find one ticket. To change how often it appears, edit `TICKET_CHANCE` near the top of the golden ticket section in `game.js`. To change the claim instructions, edit the `ticketHow` paragraph in `index.html`.
+Each time a player completes a level there's a 1-in-6 chance a golden ticket appears, tucked into a corner of the "level complete" pop-up. Clicking it shows a ticket with a code (like `TB-ABCD-1234`) for a free cup of tea at the Tea Blossom. Each browser can find one ticket. To change how often it appears, edit `TICKET_CHANCE` near the top of the golden ticket section in `game.js`. To change the claim instructions, edit the `ticketHow` paragraph in `index.html`.
 
 ## Google Search Console
 
