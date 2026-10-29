@@ -136,10 +136,10 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .board-area { position: relative; }
 .board {
   display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start;
-  gap: 26px 18px; padding: 36px 8px 22px; min-height: 0;
+  gap: 6px 18px; padding: 14px 8px 18px; min-height: 0;
 }
 .cup {
-  --cw: 122px;
+  --cw: 140px;
   position: relative; width: var(--cw); padding: 14px 0 0; background: none; border: 0; cursor: pointer;
   transition: transform .18s ease; -webkit-tap-highlight-color: transparent;
 }
@@ -226,9 +226,9 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 
 @media (max-width: 520px) {
   .ticket-promo { border-radius: 16px; font-size: 14px; padding: 10px 14px; text-align: left; }
-  .cup { --cw: 68px; padding-top: 10px; }
+  .cup { --cw: 84px; padding-top: 10px; }
   .board { min-height: 0; }
-  .board { gap: 22px 4px; padding: 34px 0 20px; min-height: 0; }
+  .board { gap: 4px 6px; padding: 12px 0 16px; min-height: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
