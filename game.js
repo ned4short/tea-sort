@@ -76,7 +76,10 @@
      The golden ticket can only appear on the "level complete" pop-up. Each time a player
      completes a level there's a TICKET_CHANCE chance it shows up, just below the
      Play again / Next level buttons. Once a player finds it, it's saved in their browser and doesn't appear again. */
-  var TICKET_CHANCE = 1 / 6;
+  var TICKET_CHANCE = 1 / 6; // chance for a player's FIRST golden ticket
+  // Each time a ticket is used up (redeemed or expired), the next one is twice as hard to find:
+  // 1st ticket = TICKET_CHANCE, 2nd = TICKET_CHANCE / 2, 3rd = TICKET_CHANCE / 4, and so on.
+  var SPENT_KEY = "teasort.goldenticket.spent"; // how many earlier tickets this player has used up
   var TICKET_KEY = "teasort.goldenticket.v1";
   var TICKET_DAYS = 30; // a golden ticket expires this many days after it's found
   var CORNERS = ["pos-tl", "pos-tr", "pos-bl", "pos-br"];
@@ -89,6 +92,16 @@
   }
   function isExpired(t) { return Date.now() > ticketExpiry(t).getTime(); }
   // A player can only hold one live ticket. Once it expires, they can find a new one.
+  function spentBefore() { try { return Math.max(0, parseInt(localStorage.getItem(SPENT_KEY), 10) || 0); } catch (e) { return 0; } }
+  // tickets used up so far = earlier tickets + the current one if it's redeemed or expired
+  function ticketsUsedUp() { var t = loadTicket(); return spentBefore() + (t && (t.redeemed || isExpired(t)) ? 1 : 0); }
+  function currentTicketChance() { return TICKET_CHANCE / Math.pow(2, ticketsUsedUp()); }
+  var PROMO_FIND = 'Find and click the golden ticket to win a free cup of tea at the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a>.';
+  var PROMO_REDEEM = 'Visit the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a> and show your golden ticket to redeem your free cup of tea.';
+  function updatePromo() {
+    var p = document.getElementById("promoText");
+    if (p) p.innerHTML = activeTicket() ? PROMO_REDEEM : PROMO_FIND;
+  }
   function activeTicket() { var t = loadTicket(); return t && !isExpired(t) && !t.redeemed ? t : null; }
   // Staff code check. Only a SHA-256 hash of the code is stored here, not the code itself.
   // The code ignores capitals and spaces, so "teablossom" and "Tea Blossom" both work.
@@ -115,7 +128,7 @@
   }
   function maybeShowTicketOnWin() {
     hideTicket();
-    if (activeTicket() || Math.random() >= TICKET_CHANCE) return;
+    if (activeTicket() || Math.random() >= currentTicketChance()) return;
     el.ticket.hidden = false;
   }
   function showTicket(t) {
@@ -151,18 +164,23 @@
       if (!ok) { el.redeemError.hidden = false; el.staffCode.select(); return; }
       t.redeemed = new Date().toISOString();
       try { localStorage.setItem(TICKET_KEY, JSON.stringify(t)); } catch (err) {}
+      updatePromo();
       showTicket(t);
     });
   }
   function claimTicket() {
     var t = activeTicket();
     if (!t) {
+      // the player's previous ticket (if any) was used up: count it before replacing it
+      var prev = loadTicket();
+      if (prev) { try { localStorage.setItem(SPENT_KEY, String(spentBefore() + 1)); } catch (e) {} }
       var now = new Date();
       t = { code: makeCode(), date: now.toISOString(), expires: new Date(now.getTime() + TICKET_DAYS * 864e5).toISOString(), level: state.level };
       try { localStorage.setItem(TICKET_KEY, JSON.stringify(t)); } catch (e) {}
     }
     hideTicket();
     el.myTicket.hidden = false;
+    updatePromo();
     showTicket(t);
   }
 
@@ -475,6 +493,7 @@
   el.redeemForm.addEventListener("submit", redeemTicket);
   el.myTicket.addEventListener("click", function () { var t = loadTicket(); if (t) showTicket(t); });
   if (loadTicket()) el.myTicket.hidden = false; // shows expired tickets too, marked "Expired"
+  updatePromo();
   [el.win, el.levelsOverlay, el.ticketOverlay].forEach(function (o) {
     o.addEventListener("click", function (e) { if (e.target === o) closeOverlay(o); });
   });
