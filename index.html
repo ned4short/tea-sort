@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"VideoGame","name":"Tea Sort Puzzle","url":"https://teasort.nedwebservices.com/","description":"Free tea pouring puzzle with 80 levels. Pour the brew until every cup holds one kind of tea.","genre":"Puzzle","gamePlatform":"Web browser","applicationCategory":"Game","operatingSystem":"Any","image":"https://teasort.nedwebservices.com/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Erica Powers"},"publisher":{"@type":"Organization","name":"Ned Games","url":"https://www.nedairfilters.com/games"}}
   </script>
@@ -115,7 +115,6 @@
 
   <div class="overlay" id="winOverlay" role="dialog" aria-modal="true" aria-labelledby="winTitle">
     <div class="modal win-modal">
-      <button type="button" class="golden-ticket" id="goldenTicket" hidden aria-label="Golden ticket! Click to claim"><span>GOLDEN<br>TICKET</span></button>
       <h2 id="winTitle">Tea's ready! ☕</h2>
       <div class="win-stars" id="winStars" role="img" aria-label=""></div>
       <div class="win-score"><span>Moves <b id="winMoves">0</b></span><span>Par <b id="winPar">0</b></span></div>
@@ -124,6 +123,7 @@
         <button class="chip" id="replayBtn" type="button">Play again</button>
         <button class="chip primary" id="nextBtn" type="button">Next level →</button>
       </div>
+      <button type="button" class="golden-ticket" id="goldenTicket" hidden aria-label="Golden ticket! Tap to claim"><span>GOLDEN<br>TICKET</span></button>
     </div>
   </div>
 
@@ -151,7 +151,7 @@
     </div>
   </div>
 
-  <script src="levels.js?v=9"></script>
-  <script src="game.js?v=9"></script>
+  <script src="levels.js?v=10"></script>
+  <script src="game.js?v=10"></script>
 </body>
 </html>

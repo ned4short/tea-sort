@@ -37,7 +37,7 @@ Each level shows a par: the fewest pours that solve it, found by an exact solver
 
 ## Golden ticket
 
-Each time a player completes a level there's a 1-in-6 chance a golden ticket appears, tucked into a corner of the "level complete" pop-up. Clicking it shows a ticket with a code (like `TB-ABCD-1234`) for a free cup of tea at the Tea Blossom. A ticket expires 30 days after it's found (`TICKET_DAYS` in `game.js`), and its expiry date is printed on it. A player can hold one live ticket at a time; once it expires they can find a new one. To change how often it appears, edit `TICKET_CHANCE` near the top of the golden ticket section in `game.js`. To change the claim instructions, edit the `ticketHow` paragraph in `index.html`.
+Each time a player completes a level there's a 1-in-6 chance a golden ticket appears, just below the Play again / Next level buttons on the "level complete" pop-up. Clicking it shows a ticket with a code (like `TB-ABCD-1234`) for a free cup of tea at the Tea Blossom. A ticket expires 30 days after it's found (`TICKET_DAYS` in `game.js`), and its expiry date is printed on it. A player can hold one live ticket at a time; once it expires they can find a new one. To change how often it appears, edit `TICKET_CHANCE` near the top of the golden ticket section in `game.js`. To change the claim instructions, edit the `ticketHow` paragraph in `index.html`.
 
 ## Google Search Console
 

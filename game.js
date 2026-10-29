@@ -69,8 +69,8 @@
 
   /* ---------- Golden ticket ----------
      The golden ticket can only appear on the "level complete" pop-up. Each time a player
-     completes a level there's a TICKET_CHANCE chance it shows up, tucked into a random corner
-     of the pop-up. Once a player finds it, it's saved in their browser and doesn't appear again. */
+     completes a level there's a TICKET_CHANCE chance it shows up, just below the
+     Play again / Next level buttons. Once a player finds it, it's saved in their browser and doesn't appear again. */
   var TICKET_CHANCE = 1 / 6;
   var TICKET_KEY = "teasort.goldenticket.v1";
   var TICKET_DAYS = 30; // a golden ticket expires this many days after it's found
@@ -100,8 +100,6 @@
   function maybeShowTicketOnWin() {
     hideTicket();
     if (activeTicket() || Math.random() >= TICKET_CHANCE) return;
-    el.ticket.classList.add(CORNERS[Math.floor(Math.random() * CORNERS.length)]);
-    el.ticket.style.setProperty("--rot", (Math.round(Math.random() * 40) - 20) + "deg");
     el.ticket.hidden = false;
   }
   function showTicket(t) {
