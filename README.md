@@ -27,6 +27,10 @@ Plain HTML, CSS and JavaScript. No build step, no dependencies.
 - DNS: a `CNAME` record for `teasort` on nedwebservices.com pointing to `ned4short.github.io`.
 - The site address appears in `index.html`, `about.html`, `privacy.html`, `sitemap.xml`, `robots.txt` and `CNAME`. Change it in all of those if the domain ever changes.
 
+## Cups per row on phones
+
+Phones show 3 cups per row. To change it, edit `--phone-cols` in the phone section at the bottom of `style.css` (for example, 4 for four in a row).
+
 ## Par and stars
 
 Each level shows a par: the fewest pours that solve it, found by an exact solver. When a level is completed the pop-up shows moves, par and stars: 3 stars at or under par, 2 stars within max(3, 25% of par) moves of it, 1 star otherwise. The level picker shows each level's best stars. The rules are in `starsFor()` in `game.js`.

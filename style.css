@@ -226,7 +226,9 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 
 @media (max-width: 520px) {
   .ticket-promo { border-radius: 16px; font-size: 14px; padding: 10px 14px; text-align: left; }
-  .cup { --cw: 84px; padding-top: 10px; }
+  /* Cups per row on phones: change --phone-cols to 4 for four in a row */
+  .board { --phone-cols: 3; }
+  .cup { --cw: min(130px, calc((100vw - 32px - (var(--phone-cols) - 1) * 6px) / var(--phone-cols) - 1px)); padding-top: 10px; }
   .board { min-height: 0; }
   .board { gap: 4px 6px; padding: 12px 0 16px; min-height: 0; }
 }
