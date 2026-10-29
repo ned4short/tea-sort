@@ -286,7 +286,7 @@
     return "rgb(" + f(r) + "," + f(g) + "," + f(b) + ")";
   }
   function drawCup(cup, i, newLayers) {
-    var svg = svgEl("svg", { viewBox: "0 0 120 142", "class": "teacup", "aria-hidden": "true", focusable: "false" });
+    var svg = svgEl("svg", { viewBox: "0 9 120 129", "class": "teacup", "aria-hidden": "true", focusable: "false" });
     // foot + stem
     svg.appendChild(svgEl("ellipse", { cx: 55, cy: 130, rx: 22, ry: 5.5, "class": "porcelain gold-line" }));
     svg.appendChild(svgEl("path", { d: "M47,115 L63,115 L61,126 L49,126 Z", "class": "porcelain gold-line" }));
