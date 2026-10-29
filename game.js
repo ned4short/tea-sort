@@ -64,7 +64,12 @@
     ticketExpiry: document.getElementById("ticketExpiry"),
     ticketCard: document.querySelector(".ticket-card"),
     ticketTitle: document.getElementById("ticketTitle"),
-    ticketHowLine: document.getElementById("ticketHow")
+    ticketHowLine: document.getElementById("ticketHow"),
+    redeemBtn: document.getElementById("redeemBtn"),
+    redeemForm: document.getElementById("redeemForm"),
+    staffCode: document.getElementById("staffCode"),
+    redeemError: document.getElementById("redeemError"),
+    cancelRedeem: document.getElementById("cancelRedeemBtn")
   };
 
   /* ---------- Golden ticket ----------
@@ -84,7 +89,18 @@
   }
   function isExpired(t) { return Date.now() > ticketExpiry(t).getTime(); }
   // A player can only hold one live ticket. Once it expires, they can find a new one.
-  function activeTicket() { var t = loadTicket(); return t && !isExpired(t) ? t : null; }
+  function activeTicket() { var t = loadTicket(); return t && !isExpired(t) && !t.redeemed ? t : null; }
+  // Staff code check. Only a SHA-256 hash of the code is stored here, not the code itself.
+  // The code ignores capitals and spaces, so "teablossom" and "Tea Blossom" both work.
+  var STAFF_CODE_HASH = "8e95a6a3ad02b9812326b53ad270882bfe24f97e15b702a7bed5157f7ee8eaf7";
+  function checkStaffCode(input) {
+    var norm = String(input || "").toLowerCase().replace(/\s+/g, "");
+    if (!(window.crypto && crypto.subtle && window.TextEncoder)) return Promise.resolve(false);
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(norm)).then(function (buf) {
+      var hex = Array.prototype.map.call(new Uint8Array(buf), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+      return hex === STAFF_CODE_HASH;
+    });
+  }
   function fmtDate(d) { return d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }); }
   function makeCode() {
     var abc = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", out = "", n = new Uint32Array(8);
@@ -103,15 +119,40 @@
     el.ticket.hidden = false;
   }
   function showTicket(t) {
-    var expired = isExpired(t), exp = ticketExpiry(t);
+    var expired = isExpired(t), exp = ticketExpiry(t), redeemed = !!t.redeemed, done = expired || redeemed;
     el.ticketCode.textContent = t.code;
     el.ticketDate.textContent = "Found " + fmtDate(new Date(t.date));
-    el.ticketExpiry.textContent = (expired ? "Expired " : "Expires ") + fmtDate(exp);
-    el.ticketCard.classList.toggle("expired", expired);
-    el.ticketTitle.textContent = expired ? "🎟️ This golden ticket has expired" : "🎟️ You found the golden ticket!";
-    el.ticketHowLine.hidden = expired;
+    el.ticketExpiry.textContent = redeemed ? "Redeemed " + fmtDate(new Date(t.redeemed)) : (expired ? "Expired " : "Expires ") + fmtDate(exp);
+    el.ticketCard.classList.toggle("expired", done);
+    el.ticketTitle.textContent = redeemed ? "🎟️ Ticket redeemed" : expired ? "🎟️ This golden ticket has expired" : "🎟️ You found the golden ticket!";
+    el.ticketHowLine.hidden = done;
+    el.redeemBtn.hidden = done;
+    closeRedeemForm();
     el.ticketOverlay.classList.add("open");
     el.closeTicket.focus();
+  }
+  function openRedeemForm() {
+    el.redeemForm.hidden = false;
+    el.redeemBtn.hidden = true;
+    el.redeemError.hidden = true;
+    el.staffCode.value = "";
+    el.staffCode.focus();
+  }
+  function closeRedeemForm() {
+    el.redeemForm.hidden = true;
+    el.redeemError.hidden = true;
+    el.staffCode.value = "";
+  }
+  function redeemTicket(e) {
+    e.preventDefault();
+    var t = loadTicket();
+    if (!t || t.redeemed || isExpired(t)) return;
+    checkStaffCode(el.staffCode.value).then(function (ok) {
+      if (!ok) { el.redeemError.hidden = false; el.staffCode.select(); return; }
+      t.redeemed = new Date().toISOString();
+      try { localStorage.setItem(TICKET_KEY, JSON.stringify(t)); } catch (err) {}
+      showTicket(t);
+    });
   }
   function claimTicket() {
     var t = activeTicket();
@@ -429,6 +470,9 @@
   if (el.share) el.share.addEventListener("click", function (e) { e.preventDefault(); share(); });
   el.ticket.addEventListener("click", claimTicket);
   el.closeTicket.addEventListener("click", function () { closeOverlay(el.ticketOverlay); });
+  el.redeemBtn.addEventListener("click", openRedeemForm);
+  el.cancelRedeem.addEventListener("click", function () { closeRedeemForm(); el.redeemBtn.hidden = false; });
+  el.redeemForm.addEventListener("submit", redeemTicket);
   el.myTicket.addEventListener("click", function () { var t = loadTicket(); if (t) showTicket(t); });
   if (loadTicket()) el.myTicket.hidden = false; // shows expired tickets too, marked "Expired"
   [el.win, el.levelsOverlay, el.ticketOverlay].forEach(function (o) {

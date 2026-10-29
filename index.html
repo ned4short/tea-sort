@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"VideoGame","name":"Tea Sort Puzzle","url":"https://teasort.nedwebservices.com/","description":"Free tea pouring puzzle with 80 levels. Pour the brew until every cup holds one kind of tea.","genre":"Puzzle","gamePlatform":"Web browser","applicationCategory":"Game","operatingSystem":"Any","image":"https://teasort.nedwebservices.com/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Erica Powers"},"publisher":{"@type":"Organization","name":"Ned Games","url":"https://www.nedairfilters.com/games"}}
   </script>
@@ -75,7 +75,7 @@
         <li>80 levels, from 3 teas up to 12. Your progress and stars are saved in your browser.</li>
       </ul>
       <h3>The golden ticket</h3>
-      <p>Find and click the golden ticket to win a free cup of tea at the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a>. It can only appear on the pop-up after you complete a level, and not every time, so keep solving levels and watch for it. Each golden ticket expires 30 days after you find it.</p>
+      <p>Find and click the golden ticket to win a free cup of tea at the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a>. It can only appear on the pop-up after you complete a level, and not every time, so keep solving levels and watch for it. To redeem it, show the ticket in the game on your phone at the Tea Blossom (screenshots can't be redeemed), and a staff member will mark it as redeemed. Each golden ticket expires 30 days after you find it.</p>
       <h3>The teas</h3>
       <p>Each tea has its own color and symbol, so you can sort them even if colors look alike to you.</p>
       <ul class="tea-key" id="teaKey">
@@ -137,8 +137,20 @@
         <p class="ticket-date" id="ticketDate"></p>
         <p class="ticket-expiry" id="ticketExpiry"></p>
       </div>
-      <p id="ticketHow">Take a screenshot of this ticket and show it at the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a> to claim your free cup of tea before it expires.</p>
-      <button class="chip primary" id="closeTicketBtn" type="button">Got it</button>
+      <p id="ticketHow">Show this ticket in the game on your phone at the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a> to redeem your free cup of tea before it expires. Screenshots can't be redeemed.</p>
+      <div class="ticket-actions">
+        <button class="chip primary" id="closeTicketBtn" type="button">Got it</button>
+        <button class="chip" id="redeemBtn" type="button">Redeem ticket</button>
+      </div>
+      <form class="redeem-form" id="redeemForm" hidden autocomplete="off">
+        <label for="staffCode"><strong>Staff only:</strong> enter the secret code to redeem this ticket.</label>
+        <input id="staffCode" type="password" inputmode="text" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="Secret code">
+        <p class="redeem-error" id="redeemError" role="alert" hidden>That code isn't right. Please try again.</p>
+        <div class="ticket-actions">
+          <button class="chip" id="cancelRedeemBtn" type="button">Cancel</button>
+          <button class="chip gold" id="confirmRedeemBtn" type="submit">Redeem</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -151,7 +163,7 @@
     </div>
   </div>
 
-  <script src="levels.js?v=10"></script>
-  <script src="game.js?v=10"></script>
+  <script src="levels.js?v=11"></script>
+  <script src="game.js?v=11"></script>
 </body>
 </html>

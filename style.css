@@ -246,3 +246,13 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .lvl-stars { font-size: 10px; letter-spacing: 1px; line-height: 1; color: inherit; opacity: .9; }
 .ticket-expiry { font-size: 14px; font-weight: 700; color: #3b2902 !important; margin: 6px 0 0 !important; }
 .ticket-card.expired { filter: grayscale(.85); opacity: .75; }
+.ticket-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.redeem-form { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--glass-edge); text-align: left; }
+.redeem-form label { display: block; font-size: 14px; color: var(--ink-soft); margin-bottom: 8px; }
+.redeem-form input {
+  width: 100%; font: 600 18px var(--font-body); padding: 10px 12px; border-radius: 10px; margin-bottom: 10px;
+  border: 1px solid var(--glass-edge); background: var(--bg); color: var(--ink);
+}
+.redeem-form input:focus { outline: 3px solid var(--gold); outline-offset: 1px; }
+.redeem-error { color: #b3261e; font-size: 14px; font-weight: 600; margin: -2px 0 10px !important; }
+.ticket-redeemed-stamp { display: inline-block; margin-top: 8px; padding: 4px 12px; border: 3px solid #6b4b06; border-radius: 6px; font-weight: 800; letter-spacing: .14em; color: #3b2902; transform: rotate(-4deg); }
