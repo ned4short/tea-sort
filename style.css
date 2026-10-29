@@ -65,7 +65,7 @@ a:hover { text-decoration-thickness: 2px; }
 .eyebrow a { color: inherit; text-decoration: none; }
 h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.15; }
 .site-header h1 { font-size: clamp(30px, 6vw, 46px); margin: 6px 0 4px; letter-spacing: -0.01em; }
-.tagline { margin: 0; color: var(--ink-soft); }
+.tagline { margin: 0; color: var(--ink-soft); font-size: 15px; }
 .byline { margin: 0 0 6px; font-family: var(--font-display); font-size: 20px; color: var(--ink); }
 .byline .built { font-family: var(--font-body); font-size: 14px; color: var(--ink-soft); }
 .byline .built a { color: inherit; }
@@ -225,6 +225,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 @media (max-width: 520px) {
+  .tagline { font-size: 14px; }
   .ticket-promo { border-radius: 16px; font-size: 14px; padding: 10px 14px; text-align: left; }
   /* Cups per row on phones: change --phone-cols to 4 for four in a row */
   .board { --phone-cols: 3; }
@@ -241,3 +242,5 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .win-score { display: flex; justify-content: center; gap: 22px; font-weight: 600; color: var(--ink-soft); }
 .win-score b { color: var(--ink); font-size: 20px; margin-left: 4px; }
 .lvl-stars { font-size: 10px; letter-spacing: 1px; line-height: 1; color: inherit; opacity: .9; }
+.ticket-expiry { font-size: 14px; font-weight: 700; color: #3b2902 !important; margin: 6px 0 0 !important; }
+.ticket-card.expired { filter: grayscale(.85); opacity: .75; }

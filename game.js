@@ -60,7 +60,11 @@
     ticketCode: document.getElementById("ticketCode"),
     ticketDate: document.getElementById("ticketDate"),
     closeTicket: document.getElementById("closeTicketBtn"),
-    myTicket: document.getElementById("myTicketBtn")
+    myTicket: document.getElementById("myTicketBtn"),
+    ticketExpiry: document.getElementById("ticketExpiry"),
+    ticketCard: document.querySelector(".ticket-card"),
+    ticketTitle: document.getElementById("ticketTitle"),
+    ticketHowLine: document.getElementById("ticketHow")
   };
 
   /* ---------- Golden ticket ----------
@@ -69,11 +73,19 @@
      of the pop-up. Once a player finds it, it's saved in their browser and doesn't appear again. */
   var TICKET_CHANCE = 1 / 6;
   var TICKET_KEY = "teasort.goldenticket.v1";
+  var TICKET_DAYS = 30; // a golden ticket expires this many days after it's found
   var CORNERS = ["pos-tl", "pos-tr", "pos-bl", "pos-br"];
 
   function loadTicket() {
     try { var t = JSON.parse(localStorage.getItem(TICKET_KEY) || "null"); return t && t.code ? t : null; } catch (e) { return null; }
   }
+  function ticketExpiry(t) {
+    return t.expires ? new Date(t.expires) : new Date(new Date(t.date).getTime() + TICKET_DAYS * 864e5);
+  }
+  function isExpired(t) { return Date.now() > ticketExpiry(t).getTime(); }
+  // A player can only hold one live ticket. Once it expires, they can find a new one.
+  function activeTicket() { var t = loadTicket(); return t && !isExpired(t) ? t : null; }
+  function fmtDate(d) { return d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }); }
   function makeCode() {
     var abc = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", out = "", n = new Uint32Array(8);
     if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(n);
@@ -87,22 +99,27 @@
   }
   function maybeShowTicketOnWin() {
     hideTicket();
-    if (loadTicket() || Math.random() >= TICKET_CHANCE) return;
+    if (activeTicket() || Math.random() >= TICKET_CHANCE) return;
     el.ticket.classList.add(CORNERS[Math.floor(Math.random() * CORNERS.length)]);
     el.ticket.style.setProperty("--rot", (Math.round(Math.random() * 40) - 20) + "deg");
     el.ticket.hidden = false;
   }
   function showTicket(t) {
+    var expired = isExpired(t), exp = ticketExpiry(t);
     el.ticketCode.textContent = t.code;
-    var d = new Date(t.date);
-    el.ticketDate.textContent = "Found " + d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+    el.ticketDate.textContent = "Found " + fmtDate(new Date(t.date));
+    el.ticketExpiry.textContent = (expired ? "Expired " : "Expires ") + fmtDate(exp);
+    el.ticketCard.classList.toggle("expired", expired);
+    el.ticketTitle.textContent = expired ? "🎟️ This golden ticket has expired" : "🎟️ You found the golden ticket!";
+    el.ticketHowLine.hidden = expired;
     el.ticketOverlay.classList.add("open");
     el.closeTicket.focus();
   }
   function claimTicket() {
-    var t = loadTicket();
+    var t = activeTicket();
     if (!t) {
-      t = { code: makeCode(), date: new Date().toISOString(), level: state.level };
+      var now = new Date();
+      t = { code: makeCode(), date: now.toISOString(), expires: new Date(now.getTime() + TICKET_DAYS * 864e5).toISOString(), level: state.level };
       try { localStorage.setItem(TICKET_KEY, JSON.stringify(t)); } catch (e) {}
     }
     hideTicket();
@@ -415,7 +432,7 @@
   el.ticket.addEventListener("click", claimTicket);
   el.closeTicket.addEventListener("click", function () { closeOverlay(el.ticketOverlay); });
   el.myTicket.addEventListener("click", function () { var t = loadTicket(); if (t) showTicket(t); });
-  if (loadTicket()) el.myTicket.hidden = false;
+  if (loadTicket()) el.myTicket.hidden = false; // shows expired tickets too, marked "Expired"
   [el.win, el.levelsOverlay, el.ticketOverlay].forEach(function (o) {
     o.addEventListener("click", function (e) { if (e.target === o) closeOverlay(o); });
   });
