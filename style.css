@@ -9,6 +9,8 @@
   --gold: #c9973f;
   --cup-gold: #c5a028;
   --cup-gold-hi: #e9c85a;
+  --porcelain: #fffaf1;
+  --cup-inside: #efe4cf;
   --glass: rgba(255, 255, 255, 0.55);
   --glass-edge: rgba(46, 59, 47, 0.35);
   --saucer: #e6d8bd;
@@ -29,6 +31,8 @@
     --gold: #e0b866;
     --cup-gold: #d9b44a;
     --cup-gold-hi: #f3d77a;
+    --porcelain: #3a332a;
+    --cup-inside: #241f19;
     --glass: rgba(255, 255, 255, 0.10);
     --glass-edge: rgba(241, 233, 218, 0.35);
     --saucer: #3b342b;
@@ -132,51 +136,35 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .board-area { position: relative; }
 .board {
   display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start;
-  gap: 26px 18px; padding: 42px 8px 26px; min-height: 300px;
+  gap: 26px 18px; padding: 36px 8px 22px; min-height: 0;
 }
 .cup {
-  --w: 62px; --h: 112px; --hw: 22px;
-  position: relative; width: calc(var(--w) + var(--hw)); height: calc(var(--h) + 40px);
-  background: none; border: 0; padding: 0; cursor: pointer;
-  transition: transform .18s ease;
-  -webkit-tap-highlight-color: transparent;
+  --cw: 100px;
+  position: relative; width: var(--cw); padding: 14px 0 0; background: none; border: 0; cursor: pointer;
+  transition: transform .18s ease; -webkit-tap-highlight-color: transparent;
 }
-.cup:focus-visible { outline: 3px solid var(--gold); outline-offset: 6px; border-radius: 12px; }
-.cup .glass {
-  position: absolute; left: 4px; top: 12px; width: var(--w); height: var(--h);
-  border: 2.5px solid var(--cup-gold); border-top-width: 3px;
-  border-radius: 6px 6px 26px 26px;
-  background: var(--glass); overflow: hidden;
-  display: flex; flex-direction: column-reverse;
-  box-shadow: inset 0 -6px 12px rgba(0,0,0,.06);
-}
-.cup .handle {
-  position: absolute; left: calc(var(--w) + 2px); top: 34px; width: 18px; height: 40px;
-  border: 2.5px solid var(--cup-gold); border-left: 0; border-radius: 0 16px 16px 0;
-}
-.cup .saucer {
-  position: absolute; left: -6px; right: 4px; bottom: 10px; height: 12px;
-  background: var(--saucer); border-radius: 50%; box-shadow: 0 3px 0 rgba(0,0,0,.08);
-  z-index: -1;
-}
-.layer {
-  height: 25%; width: 100%; position: relative; flex: none;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; color: rgba(255,255,255,.75); text-shadow: 0 1px 1px rgba(0,0,0,.25);
-}
-.layer + .layer { box-shadow: 0 1px 0 rgba(255,255,255,.18) inset; }
-.layer.light { color: rgba(60,40,20,.55); text-shadow: none; }
-.layer.pour-in { animation: fillIn .32s ease-out both; transform-origin: bottom; }
+.cup:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; border-radius: 12px; }
+.teacup { display: block; width: 100%; height: auto; overflow: visible; }
+.teacup .porcelain { fill: var(--porcelain); }
+.teacup .gold-line { stroke: var(--cup-gold); stroke-width: 3; stroke-linejoin: round; }
+.teacup .porcelain.gold-line { stroke: var(--cup-gold); }
+.teacup .handle-outer { fill: none; stroke: var(--cup-gold); stroke-width: 9; stroke-linecap: round; }
+.teacup .handle-inner { fill: none; stroke: var(--porcelain); stroke-width: 3.5; stroke-linecap: round; }
+.teacup .opening { fill: var(--cup-inside); stroke: var(--cup-gold); stroke-width: 2; }
+.teacup .opening-tea { stroke: var(--cup-gold); stroke-width: 2; }
+.teacup .glyph { font: 600 11px var(--font-body); fill: rgba(255,255,255,.8); }
+.teacup .glyph.light { fill: rgba(60,40,20,.55); }
+.layer.pour-in { animation: fillIn .32s ease-out both; transform-box: fill-box; transform-origin: bottom; }
 @keyframes fillIn { from { transform: scaleY(0); opacity: .4; } to { transform: scaleY(1); opacity: 1; } }
 
 .cup.selected { transform: translateY(-18px); }
-.cup.selected .glass { border-color: var(--cup-gold-hi); box-shadow: 0 0 0 3px rgba(233,200,90,.45), 0 8px 18px rgba(197,160,40,.35); }
-.cup.selected .handle { border-color: var(--cup-gold-hi); }
+.cup.selected .teacup { filter: drop-shadow(0 0 5px rgba(233,200,90,.9)) drop-shadow(0 8px 10px rgba(197,160,40,.35)); }
+.cup.selected .gold-line, .cup.selected .handle-outer, .cup.selected .opening, .cup.selected .opening-tea { stroke: var(--cup-gold-hi); }
 .cup.shake { animation: shake .3s; }
 @keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
 /* steam on finished cups */
-.cup .steam { position: absolute; left: 12px; top: -16px; width: calc(var(--w) - 16px); height: 26px; opacity: 0; pointer-events: none; }
+.cup .steam { position: absolute; left: 22%; top: -8px; width: 48%; height: 24px; opacity: 0; pointer-events: none; }
 .cup.done .steam { opacity: 1; }
 .steam span {
   position: absolute; bottom: 0; width: 6px; height: 20px; border-radius: 6px;
@@ -238,11 +226,9 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 
 @media (max-width: 520px) {
   .ticket-promo { border-radius: 16px; font-size: 14px; padding: 10px 14px; text-align: left; }
-  .cup { --w: 44px; --h: 86px; --hw: 14px; }
-  .cup .handle { width: 11px; height: 28px; top: 26px; border-width: 2px; }
-  .cup .glass { border-radius: 5px 5px 20px 20px; }
+  .cup { --cw: 64px; padding-top: 10px; }
+  .board { min-height: 0; }
   .board { gap: 22px 8px; padding: 34px 0 20px; min-height: 0; }
-  .layer { font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }

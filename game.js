@@ -167,6 +167,75 @@
     return "Cup " + (i + 1) + ", top to bottom: " + names.join(", ");
   }
 
+  /* ---------- Teacup drawing (SVG) ----------
+     viewBox 0 0 120 130. Tea layers are clipped to the inside of the bowl (#cupInside, defined once in index.html). */
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var FILL_BOTTOM = 110, FILL_TOP = 30, LAYER_H = (FILL_BOTTOM - FILL_TOP) / CAP;
+  // half-width of the inside of the bowl at a given height, sampled from its bezier curve
+  var bowlSamples = (function () {
+    var p0 = [92, 27], p1 = [94, 80], p2 = [78, 106], p3 = [63, 110], pts = [];
+    for (var t = 0; t <= 1.0001; t += 0.02) {
+      var u = 1 - t;
+      pts.push([u*u*u*p0[0] + 3*u*u*t*p1[0] + 3*u*t*t*p2[0] + t*t*t*p3[0], u*u*u*p0[1] + 3*u*u*t*p1[1] + 3*u*t*t*p2[1] + t*t*t*p3[1]]);
+    }
+    return pts;
+  })();
+  function bowlHalfWidth(y) {
+    for (var k = 1; k < bowlSamples.length; k++) {
+      var a = bowlSamples[k - 1], b = bowlSamples[k];
+      if (y >= a[1] && y <= b[1]) { var f = (y - a[1]) / ((b[1] - a[1]) || 1); return (a[0] + f * (b[0] - a[0])) - 55; }
+    }
+    return 8;
+  }
+  function svgEl(tag, attrs) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function shade(hex, amt) { // lighten (amt>0) or darken (amt<0) a #rrggbb colour
+    var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+    var f = function (c) { return Math.max(0, Math.min(255, Math.round(amt > 0 ? c + (255 - c) * amt : c * (1 + amt)))); };
+    return "rgb(" + f(r) + "," + f(g) + "," + f(b) + ")";
+  }
+  function drawCup(cup, i, newLayers) {
+    var svg = svgEl("svg", { viewBox: "0 0 120 142", "class": "teacup", "aria-hidden": "true", focusable: "false" });
+    // foot + stem
+    svg.appendChild(svgEl("ellipse", { cx: 55, cy: 130, rx: 22, ry: 5.5, "class": "porcelain gold-line" }));
+    svg.appendChild(svgEl("path", { d: "M47,115 L63,115 L61,126 L49,126 Z", "class": "porcelain gold-line" }));
+    // handle
+    svg.appendChild(svgEl("path", { d: "M95,42 C121,38 122,94 84,97", "class": "handle-outer" }));
+    svg.appendChild(svgEl("path", { d: "M95,42 C121,38 122,94 84,97", "class": "handle-inner" }));
+    // bowl
+    svg.appendChild(svgEl("path", { d: "M12,24 C9,84 28,112 46,116 L64,116 C82,112 101,84 98,24 Z", "class": "porcelain" }));
+    // tea layers, clipped to the inside of the bowl
+    var g = svgEl("g", { "clip-path": "url(#cupInside)" });
+    cup.forEach(function (x, j) {
+      var tea = TEAS[x];
+      var y = FILL_BOTTOM - (j + 1) * LAYER_H;
+      var lg = svgEl("g", { "class": "layer" + (newLayers && newLayers.cup === i && j >= cup.length - newLayers.count ? " pour-in" : "") });
+      lg.appendChild(svgEl("rect", { x: 8, y: y - 0.4, width: 94, height: LAYER_H + 0.8, fill: tea.color }));
+      var t = svgEl("text", { x: 55, y: y + LAYER_H / 2 + 4.5, "text-anchor": "middle", "class": "glyph" + (tea.light ? " light" : "") });
+      t.textContent = tea.glyph;
+      lg.appendChild(t);
+      var title = svgEl("title", {}); title.textContent = tea.name; lg.appendChild(title);
+      g.appendChild(lg);
+    });
+    // tea surface (seen from slightly above) when the cup isn't full
+    if (cup.length && cup.length < CAP) {
+      var top = TEAS[cup[cup.length - 1]], sy = FILL_BOTTOM - cup.length * LAYER_H;
+      g.appendChild(svgEl("ellipse", { cx: 55, cy: sy, rx: Math.max(6, bowlHalfWidth(sy) - 0.5), ry: 3.2, fill: shade(top.color, 0.22) }));
+    }
+    svg.appendChild(g);
+    // bowl outline on top of the tea
+    svg.appendChild(svgEl("path", { d: "M12,24 C9,84 28,112 46,116 L64,116 C82,112 101,84 98,24", "class": "gold-line", fill: "none" }));
+    // rim + opening
+    svg.appendChild(svgEl("ellipse", { cx: 55, cy: 23, rx: 50, ry: 11, "class": "porcelain gold-line" }));
+    var full = cup.length === CAP;
+    svg.appendChild(svgEl("ellipse", { cx: 55, cy: 23, rx: 40, ry: 7,
+      "class": full ? "opening-tea" : "opening", fill: full ? shade(TEAS[cup[CAP - 1]].color, 0.18) : "" }));
+    return svg;
+  }
+
   function render(newLayers) {
     board.innerHTML = "";
     state.cups.forEach(function (cup, i) {
@@ -175,22 +244,8 @@
       b.className = "cup" + (i === state.selected ? " selected" : "") + (isDone(cup) ? " done" : "");
       b.setAttribute("aria-label", cupLabel(cup, i));
       b.dataset.index = i;
-      b.innerHTML = '<span class="steam" aria-hidden="true"><span></span><span></span><span></span></span>' +
-        '<span class="saucer" aria-hidden="true"></span><span class="handle" aria-hidden="true"></span>';
-      var glass = document.createElement("span");
-      glass.className = "glass";
-      glass.setAttribute("aria-hidden", "true");
-      cup.forEach(function (x, j) {
-        var tea = TEAS[x];
-        var layer = document.createElement("span");
-        layer.className = "layer" + (tea.light ? " light" : "");
-        if (newLayers && newLayers.cup === i && j >= cup.length - newLayers.count) layer.className += " pour-in";
-        layer.style.background = tea.color;
-        layer.textContent = tea.glyph;
-        layer.title = tea.name;
-        glass.appendChild(layer);
-      });
-      b.appendChild(glass);
+      b.innerHTML = '<span class="steam" aria-hidden="true"><span></span><span></span><span></span></span>';
+      b.appendChild(drawCup(cup, i, newLayers));
       b.addEventListener("click", onCupClick);
       board.appendChild(b);
     });
