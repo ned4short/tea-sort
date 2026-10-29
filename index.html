@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"VideoGame","name":"Tea Sort Puzzle","url":"https://teasort.nedwebservices.com/","description":"Free tea pouring puzzle with 80 levels. Pour the brew until every cup holds one kind of tea.","genre":"Puzzle","gamePlatform":"Web browser","applicationCategory":"Game","operatingSystem":"Any","image":"https://teasort.nedwebservices.com/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Erica Powers"},"publisher":{"@type":"Organization","name":"Ned Games","url":"https://www.nedairfilters.com/games"}}
   </script>
@@ -50,6 +50,7 @@
     <section class="board-area" aria-label="Game">
       <div class="toolbar" role="toolbar" aria-label="Game controls">
         <span class="stat">Level <b id="levelNum">1</b></span>
+        <span class="stat">Par <b id="parNum">–</b></span>
         <span class="stat">Moves <b id="moveCount">0</b></span>
         <button class="chip" id="undoBtn" type="button" aria-label="Undo last pour">↶ Undo</button>
         <button class="chip" id="restartBtn" type="button">↻ Restart</button>
@@ -71,7 +72,8 @@
         <li>A cup holds four layers and can't be filled past the brim.</li>
         <li>Solve the level when every cup holds one kind of tea.</li>
         <li>Stuck? Use <strong>Undo</strong>, <strong>Restart</strong>, or add <strong>one extra cup</strong> per level.</li>
-        <li>80 levels, from 3 teas up to 12. Your progress is saved in your browser.</li>
+        <li>Every level has a <strong>par</strong>: the fewest pours it can be solved in. Finish at par for ★★★, within a few moves for ★★, or any finish for ★.</li>
+        <li>80 levels, from 3 teas up to 12. Your progress and stars are saved in your browser.</li>
       </ul>
       <h3>The golden ticket</h3>
       <p>Find and click the golden ticket to win a free cup of tea at the <a href="https://ateapartyinabox.com/pages/the-tea-blossom">Tea Blossom</a>. It can only appear on the pop-up after you complete a level, and not every time, so keep solving levels and watch for it.</p>
@@ -116,6 +118,8 @@
     <div class="modal win-modal">
       <button type="button" class="golden-ticket" id="goldenTicket" hidden aria-label="Golden ticket! Click to claim"><span>GOLDEN<br>TICKET</span></button>
       <h2 id="winTitle">Tea's ready! ☕</h2>
+      <div class="win-stars" id="winStars" role="img" aria-label=""></div>
+      <div class="win-score"><span>Moves <b id="winMoves">0</b></span><span>Par <b id="winPar">0</b></span></div>
       <p id="winText"></p>
       <div class="actions">
         <button class="chip" id="replayBtn" type="button">Play again</button>
@@ -147,7 +151,7 @@
     </div>
   </div>
 
-  <script src="levels.js?v=4"></script>
-  <script src="game.js?v=4"></script>
+  <script src="levels.js?v=5"></script>
+  <script src="game.js?v=5"></script>
 </body>
 </html>

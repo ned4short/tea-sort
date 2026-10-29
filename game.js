@@ -20,6 +20,16 @@
   window.TEA_TYPES = TEAS;
 
   var LEVELS = window.TEA_LEVELS || [];
+  var PARS = window.TEA_PARS || [];
+  function parFor(n) { return PARS[n - 1] || 0; }
+  // 3 stars: at or under par. 2 stars: within max(3, 25% of par). 1 star: any finish.
+  function starsFor(moves, par) {
+    if (!par) return 3;
+    if (moves <= par) return 3;
+    if (moves <= par + Math.max(3, Math.ceil(par * 0.25))) return 2;
+    return 1;
+  }
+  function starString(n) { return "★★★".slice(0, n) + "☆☆☆".slice(0, 3 - n); }
   var STORE_KEY = "teasort.progress.v1";
 
   var board = document.getElementById("board");
@@ -27,6 +37,10 @@
 
   var el = {
     level: document.getElementById("levelNum"),
+    par: document.getElementById("parNum"),
+    winStars: document.getElementById("winStars"),
+    winMoves: document.getElementById("winMoves"),
+    winPar: document.getElementById("winPar"),
     moves: document.getElementById("moveCount"),
     undo: document.getElementById("undoBtn"),
     restart: document.getElementById("restartBtn"),
@@ -250,6 +264,7 @@
       board.appendChild(b);
     });
     el.level.textContent = state.level;
+    el.par.textContent = parFor(state.level) || "–";
     el.moves.textContent = state.moves;
     el.undo.disabled = !state.history.length || state.busy;
     el.extra.disabled = state.extraUsed || state.busy;
@@ -335,13 +350,22 @@
   }
 
   function onWin() {
+    var par = parFor(state.level), stars = starsFor(state.moves, par);
     progress.completed[state.level] = Math.min(progress.completed[state.level] || Infinity, state.moves);
     var last = state.level >= LEVELS.length;
     progress.current = last ? state.level : state.level + 1;
     saveProgress();
+    el.winStars.textContent = starString(stars);
+    el.winStars.setAttribute("aria-label", stars + " out of 3 stars");
+    el.winMoves.textContent = state.moves;
+    el.winPar.textContent = par || "–";
+    var verdict = state.moves < par ? "You beat par!" :
+      state.moves === par ? "Perfect pour! You matched par." :
+      stars === 2 ? "So close to par. Play again for 3 stars?" :
+      "Nicely done. Can you get closer to par?";
     el.winText.textContent = last
-      ? "You sorted all " + LEVELS.length + " levels in " + state.moves + " moves on the final one. You're a true tea master!"
-      : "Level " + state.level + " sorted in " + state.moves + " moves. Ready for the next pot?";
+      ? verdict + " You've sorted all " + LEVELS.length + " levels. You're a true tea master!"
+      : verdict;
     el.next.hidden = last;
     maybeShowTicketOnWin();
     el.win.classList.add("open");
@@ -355,10 +379,15 @@
       var b = document.createElement("button");
       b.type = "button";
       b.textContent = n;
-      if (progress.completed[n]) b.className = "done";
+      if (progress.completed[n]) {
+        b.className = "done";
+        var st = starsFor(progress.completed[n], parFor(n));
+        var sp = document.createElement("span"); sp.className = "lvl-stars"; sp.textContent = starString(st);
+        b.appendChild(sp);
+      }
       if (n === state.level) b.className += " current";
       if (n > max) { b.disabled = true; b.setAttribute("aria-label", "Level " + n + ", locked"); }
-      else b.setAttribute("aria-label", "Level " + n + (progress.completed[n] ? ", completed" : ""));
+      else b.setAttribute("aria-label", "Level " + n + (progress.completed[n] ? ", completed, " + starsFor(progress.completed[n], parFor(n)) + " stars" : ""));
       b.addEventListener("click", (function (lv) { return function () { closeOverlay(el.levelsOverlay); startLevel(lv); }; })(n));
       el.levelGrid.appendChild(b);
     }

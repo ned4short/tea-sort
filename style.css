@@ -193,7 +193,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .modal .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .level-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 8px; margin: 12px 0 18px; }
 .level-grid button {
-  height: 44px; border-radius: 10px; border: 1px solid var(--glass-edge); background: var(--bg);
+  height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 0; border-radius: 10px; border: 1px solid var(--glass-edge); background: var(--bg);
   color: var(--ink); font: 600 15px var(--font-body); cursor: pointer;
 }
 .level-grid button.done { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -233,3 +233,9 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* Par and stars */
+.win-stars { font-size: 40px; line-height: 1; letter-spacing: 6px; color: var(--cup-gold); margin: 6px 0 8px; text-shadow: 0 2px 0 rgba(120,85,10,.18); }
+.win-score { display: flex; justify-content: center; gap: 22px; font-weight: 600; color: var(--ink-soft); }
+.win-score b { color: var(--ink); font-size: 20px; margin-left: 4px; }
+.lvl-stars { font-size: 10px; letter-spacing: 1px; line-height: 1; color: inherit; opacity: .9; }
