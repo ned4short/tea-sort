@@ -4,18 +4,18 @@
 
   var CAP = 4;
   var TEAS = {
-    a: { name: "Green Tea",     color: "#9cc34a", glyph: "●" },
-    b: { name: "Black Tea",     color: "#4e2a1e", glyph: "■" },
-    c: { name: "Chai",          color: "#d08a4a", glyph: "▲" },
-    d: { name: "Hibiscus",      color: "#d81b60", glyph: "✿" },
-    e: { name: "Butterfly Pea", color: "#3949ab", glyph: "◆" },
-    f: { name: "Chamomile",     color: "#f4d23c", glyph: "★", light: true },
-    g: { name: "Peppermint",    color: "#26a69a", glyph: "✚" },
-    h: { name: "Rooibos",       color: "#b5441b", glyph: "♥" },
-    i: { name: "Lavender",      color: "#9c7ad6", glyph: "☾" },
-    j: { name: "Earl Grey",     color: "#7d8aa3", glyph: "♣" },
-    k: { name: "Rose",          color: "#f4a3c0", glyph: "❀", light: true },
-    l: { name: "Milk Oolong",   color: "#ecdcb8", glyph: "▼", light: true }
+    a: { name: "Mint Green", color: "#9cc34a", glyph: "●" },
+    b: { name: "Earl in the Garden", color: "#4e2a1e", glyph: "■" },
+    c: { name: "Fireball", color: "#d08a4a", glyph: "▲" },
+    d: { name: "Hibiscus", color: "#d81b60", glyph: "✿" },
+    e: { name: "Blue Fairy", color: "#3949ab", glyph: "◆" },
+    f: { name: "Grandma's Candy", color: "#f4d23c", glyph: "★", light: true },
+    g: { name: "Mint Chocolate", color: "#26a69a", glyph: "✚" },
+    h: { name: "Rooibos", color: "#b5441b", glyph: "♥" },
+    i: { name: "Lovely Lavender", color: "#9c7ad6", glyph: "☾" },
+    j: { name: "Earl Grey", color: "#7d8aa3", glyph: "♣" },
+    k: { name: "Rose Garden", color: "#f4a3c0", glyph: "❀", light: true },
+    l: { name: "Melted Gummy", color: "#ecdcb8", glyph: "▼", light: true }
   };
   window.TEA_TYPES = TEAS;
 
