@@ -5,7 +5,7 @@
   var CAP = 4;
   var TEAS = {
     a: { name: "Mint Green", color: "#9cc34a", glyph: "●" },
-    b: { name: "Earl in the Garden", color: "#4e2a1e", glyph: "■" },
+    b: { name: "Chai", color: "#4e2a1e", glyph: "■" },
     c: { name: "Fireball", color: "#d08a4a", glyph: "▲" },
     d: { name: "Hibiscus", color: "#d81b60", glyph: "✿" },
     e: { name: "Blue Fairy", color: "#3949ab", glyph: "◆" },
