@@ -261,7 +261,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .content details.fold + details.fold { margin-top: 0; }
 .content details.fold summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; }
 .content details.fold summary::-webkit-details-marker { display: none; }
-.content details.fold summary h2, .content details.fold summary h3 { margin: 0; }
+.content details.fold summary h2, .content details.fold summary h3 { margin: 0; font-size: 20px; }
 .content details.fold summary::after { content: "+"; font-size: 26px; line-height: 1; font-weight: 700; opacity: .7; flex: none; }
 .content details.fold[open] summary::after { content: "−"; }
 .content details.fold > :last-child { margin-bottom: 14px; }
